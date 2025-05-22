@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import type { Task } from './types/task'
 import { v4 as uuidv4 } from 'uuid'
+import TaskList from './components/TaskList'
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([])
@@ -41,12 +42,6 @@ function App() {
   const deleteTask = (id: string) => {
     setTasks(tasks.filter(task => task.id !== id))
   }
-
-  const filteredTasks = tasks.filter(task => {
-    if (filter === 'active') return !task.completed
-    if (filter === 'completed') return task.completed
-    return true
-  })
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 flex flex-col items-center py-10">
@@ -88,74 +83,12 @@ function App() {
         ))}
       </div>
 
-      <ul className="w-full max-w-md space-y-3">
-        {tasks.length === 0 ? (
-          <li className="bg-white rounded shadow px-4 py-8 text-center text-indigo-400 text-lg font-semibold animate-pulse">
-            No tasks! Nothing to do, happy day! 🎉
-          </li>
-        ) : filter === 'active' && filteredTasks.length === 0 ? (
-          <li className="bg-white rounded shadow px-4 py-8 text-center text-indigo-400 text-lg font-semibold animate-pulse">
-            No tasks! Nothing to do, happy day! 🎉
-          </li>
-        ) : filteredTasks.length === 0 ? (
-          <li className="bg-white rounded shadow px-4 py-8 text-center text-indigo-300 text-base font-medium">
-            No tasks in this filter.
-          </li>
-        ) : (
-          filteredTasks.map(task => (
-            <li
-              key={task.id}
-              className="bg-white rounded shadow flex flex-col gap-1 px-4 py-3 hover:shadow-lg transition group"
-            >
-              <div className="flex items-center justify-between">
-                <label className="flex items-center gap-2 flex-1 cursor-pointer select-none group-hover:text-indigo-600">
-                  <input
-                    type="checkbox"
-                    checked={task.completed}
-                    onChange={() => toggleComplete(task.id)}
-                    className="accent-indigo-600 w-4 h-4"
-                  />
-                  <span
-                    className={
-                      task.completed
-                        ? 'line-through text-gray-400'
-                        : 'text-gray-800'
-                    }
-                  >
-                    {task.title}
-                  </span>
-                </label>
-                <button
-                  className="ml-4 px-2 py-1 text-xs bg-red-100 text-red-500 rounded hover:bg-red-200 transition"
-                  onClick={() => deleteTask(task.id)}
-                >
-                  Delete
-                </button>
-              </div>
-              <div className="flex flex-wrap gap-4 text-xs text-gray-400 mt-1">
-                <span>
-                  Created:{' '}
-                  {task.createdAt
-                    ? new Date(task.createdAt).toLocaleString()
-                    : '-'}
-                </span>
-                <span>
-                  Updated:{' '}
-                  {task.updatedAt
-                    ? new Date(task.updatedAt).toLocaleString()
-                    : '-'}
-                </span>
-                <span>
-                  Completed:{' '}
-                  {task.completedAt
-                    ? new Date(task.completedAt).toLocaleString()
-                    : '-'}
-                </span>
-              </div>
-            </li>
-          ))
-        )}
-      </ul>
+      <TaskList
+        tasks={tasks}
+        onToggle={toggleComplete}
+        onDelete={deleteTask}
+        filter={filter}
+      />
     </div>
   )
 }
