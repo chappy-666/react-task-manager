@@ -89,9 +89,17 @@ function App() {
       </div>
 
       <ul className="w-full max-w-md space-y-3">
-        {filteredTasks.length === 0 ? (
+        {tasks.length === 0 ? (
           <li className="bg-white rounded shadow px-4 py-8 text-center text-indigo-400 text-lg font-semibold animate-pulse">
             No tasks! Nothing to do, happy day! 🎉
+          </li>
+        ) : filter === 'active' && filteredTasks.length === 0 ? (
+          <li className="bg-white rounded shadow px-4 py-8 text-center text-indigo-400 text-lg font-semibold animate-pulse">
+            No tasks! Nothing to do, happy day! 🎉
+          </li>
+        ) : filteredTasks.length === 0 ? (
+          <li className="bg-white rounded shadow px-4 py-8 text-center text-indigo-300 text-base font-medium">
+            No tasks in this filter.
           </li>
         ) : (
           filteredTasks.map(task => (
@@ -100,16 +108,23 @@ function App() {
               className="bg-white rounded shadow flex flex-col gap-1 px-4 py-3 hover:shadow-lg transition group"
             >
               <div className="flex items-center justify-between">
-                <div
-                  className={`flex-1 cursor-pointer select-none ${
-                    task.completed
-                      ? 'line-through text-gray-400'
-                      : 'text-gray-800'
-                  } group-hover:text-indigo-600`}
-                  onClick={() => toggleComplete(task.id)}
-                >
-                  {task.title}
-                </div>
+                <label className="flex items-center gap-2 flex-1 cursor-pointer select-none group-hover:text-indigo-600">
+                  <input
+                    type="checkbox"
+                    checked={task.completed}
+                    onChange={() => toggleComplete(task.id)}
+                    className="accent-indigo-600 w-4 h-4"
+                  />
+                  <span
+                    className={
+                      task.completed
+                        ? 'line-through text-gray-400'
+                        : 'text-gray-800'
+                    }
+                  >
+                    {task.title}
+                  </span>
+                </label>
                 <button
                   className="ml-4 px-2 py-1 text-xs bg-red-100 text-red-500 rounded hover:bg-red-200 transition"
                   onClick={() => deleteTask(task.id)}
