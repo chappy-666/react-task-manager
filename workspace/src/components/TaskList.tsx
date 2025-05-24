@@ -15,11 +15,21 @@ const TaskList: React.FC<TaskListProps> = ({
   onDelete,
   filter,
 }) => {
-  const filteredTasks = tasks.filter(task => {
-    if (filter === 'active') return !task.completed
-    if (filter === 'completed') return task.completed
-    return true
-  })
+  const getOrder = (task: Task) => {
+    // high,urgent: 0; low,urgent: 1; high,normal: 2; low,normal: 3
+    if (task.priority === 'high' && task.urgency === 'urgent') return 0
+    if (task.priority === 'low' && task.urgency === 'urgent') return 1
+    if (task.priority === 'high' && task.urgency === 'normal') return 2
+    return 3
+  }
+
+  const filteredTasks = tasks
+    .filter(task => {
+      if (filter === 'active') return !task.completed
+      if (filter === 'completed') return task.completed
+      return true
+    })
+    .sort((a, b) => getOrder(a) - getOrder(b))
 
   if (
     tasks.length === 0 ||

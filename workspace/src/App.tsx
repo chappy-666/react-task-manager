@@ -3,11 +3,13 @@ import './App.css'
 import type { Task } from './types/task'
 import { v4 as uuidv4 } from 'uuid'
 import TaskList from './components/TaskList'
+import { Button } from './components/ui/button'
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [title, setTitle] = useState('')
   const [priority, setPriority] = useState<'low' | 'high'>('low')
+  const [urgency, setUrgency] = useState<'normal' | 'urgent'>('normal')
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('active')
 
   const addTask = () => {
@@ -17,6 +19,7 @@ function App() {
       id: uuidv4(),
       title: title.trim(),
       priority: priority,
+      urgency: urgency,
       completed: false,
       createdAt: now,
       updatedAt: now,
@@ -47,10 +50,6 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 flex flex-col items-center py-10">
-      <h1 className="text-3xl font-bold text-indigo-700 mb-8 drop-shadow">
-        Task Manager
-      </h1>
-
       <div className="flex gap-2 mb-6 w-full max-w-md">
         <input
           className="flex-1 px-4 py-2 rounded-l border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white shadow"
@@ -69,27 +68,31 @@ function App() {
           <option value="low">Low</option>
           <option value="high">High</option>
         </select>
-        <button
-          className="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-r hover:bg-indigo-700 transition"
-          onClick={addTask}
+        <select
+          className="px-2 py-2 border-t border-b border-r border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          value={urgency}
+          onChange={e => setUrgency(e.target.value as 'normal' | 'urgent')}
         >
+          <option value="normal">Normal</option>
+          <option value="urgent">Urgent</option>
+        </select>
+        <Button size="lg" className="rounded-r" onClick={addTask}>
           Add
-        </button>
+        </Button>
       </div>
 
       <div className="flex gap-2 mb-8">
         {(['all', 'active', 'completed'] as const).map(f => (
-          <button
+          <Button
+            size="lg"
             key={f}
-            className={`px-3 py-1 rounded border font-medium transition shadow-sm ${
-              filter === f
-                ? 'bg-indigo-600 text-white border-indigo-600'
-                : 'bg-white text-indigo-600 border-indigo-300 hover:bg-indigo-100'
+            className={`min-w-24 rounded-sm ${
+              filter === f ? '' : 'bg-white text-violet-500 hover:bg-violet-200'
             }`}
             onClick={() => setFilter(f)}
           >
             {f === 'all' ? 'All' : f === 'active' ? 'Active' : 'Completed'}
-          </button>
+          </Button>
         ))}
       </div>
 

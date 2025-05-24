@@ -5,5 +5,6 @@ export interface Task {
   createdAt: string
   updatedAt: string
   priority: 'low' | 'high'
+  urgency: 'normal' | 'urgent'
   completedAt: string | null
 }
