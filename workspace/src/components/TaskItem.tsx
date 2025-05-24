@@ -23,6 +23,15 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onToggle, onDelete }) => (
         >
           {task.title}
         </span>
+        {task.priority === 'high' ? (
+          <span className="ml-2 px-2 py-0.5 rounded bg-red-100 text-red-600 text-xs font-bold border border-red-200 animate-pulse">
+            HIGH
+          </span>
+        ) : (
+          <span className="ml-2 px-2 py-0.5 rounded bg-gray-100 text-gray-500 text-xs font-medium border border-gray-200">
+            LOW
+          </span>
+        )}
       </label>
       <button
         className="ml-4 px-2 py-1 text-xs bg-red-100 text-red-500 rounded hover:bg-red-200 transition"

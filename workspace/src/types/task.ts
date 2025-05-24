@@ -4,5 +4,6 @@ export interface Task {
   completed: boolean
   createdAt: string
   updatedAt: string
+  priority: 'low' | 'high'
   completedAt: string | null
 }

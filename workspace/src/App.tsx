@@ -7,6 +7,7 @@ import TaskList from './components/TaskList'
 function App() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [title, setTitle] = useState('')
+  const [priority, setPriority] = useState<'low' | 'high'>('low')
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('active')
 
   const addTask = () => {
@@ -15,6 +16,7 @@ function App() {
     const newTask: Task = {
       id: uuidv4(),
       title: title.trim(),
+      priority: priority,
       completed: false,
       createdAt: now,
       updatedAt: now,
@@ -59,6 +61,14 @@ function App() {
             if (e.key === 'Enter' && !e.nativeEvent.isComposing) addTask()
           }}
         />
+        <select
+          className="px-2 py-2 border-t border-b border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          value={priority}
+          onChange={e => setPriority(e.target.value as 'low' | 'high')}
+        >
+          <option value="low">Low</option>
+          <option value="high">High</option>
+        </select>
         <button
           className="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-r hover:bg-indigo-700 transition"
           onClick={addTask}
